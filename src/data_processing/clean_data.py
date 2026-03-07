@@ -17,8 +17,8 @@ df["GPA_Points"] = (
     (df["D"] * 1.0) +
     (df["D-"] * 0.7) +
     (df["F"] * 0.0)
-)
+).round(2)
 
-df["Average_GPA"] = df["GPA_Points"] / df["Students"]
+df["Average_GPA"] = (df["GPA_Points"] / df["Students"]).round(2)
 
 df.to_csv("data/processed/cleaned_grades.csv", index = False)
