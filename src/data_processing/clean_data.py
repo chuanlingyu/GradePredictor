@@ -21,4 +21,8 @@ df["GPA_Points"] = (
 
 df["Average_GPA"] = (df["GPA_Points"] / df["Students"]).round(2)
 
+instructor_avg = df.groupby("Primary Instructor")["Average_GPA"].mean().round(2)
+
+df["Instructor_Avg_GPA"] = df["Primary Instructor"].map(instructor_avg)
+
 df.to_csv("data/processed/cleaned_grades.csv", index = False)
