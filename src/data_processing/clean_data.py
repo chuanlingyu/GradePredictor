@@ -20,6 +20,7 @@ df["GPA_Points"] = (
 ).round(2)
 
 df["Average_GPA"] = (df["GPA_Points"] / df["Students"]).round(2)
+df = df.drop(columns=["GPA_Points"])
 
 instructor_avg = df.groupby("Primary Instructor")["Average_GPA"].mean().round(2)
 
