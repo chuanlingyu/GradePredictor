@@ -1,4 +1,4 @@
-# school-assistant
+# GradePredictor
 The repository for the GradePredictor guided project for the UIUC SIGAIDA club. The ultimate goal is to create a class schedule generator for students in UIUC. 
 
 ## Project Structure
