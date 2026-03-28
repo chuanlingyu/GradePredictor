@@ -51,4 +51,18 @@ df = df.drop(columns=cols_to_drop)
 
 df = pd.get_dummies(df, columns=["College"], drop_first=True)
 
+Q1 = df['Average_GPA'].quantile(0.25)
+Q3 = df['Average_GPA'].quantile(0.75)
+
+IQR = Q3 - Q1
+
+lower_bound = Q1 - 1.5 * IQR
+upper_bound = Q3 + 1.5 * IQR
+
+df = df[(df['Average_GPA'] >= lower_bound) & (df['Average_GPA'] <= upper_bound)]
+
+# mean = df['Average_GPA'].mean()
+# std = df['Average_GPA'].std()
+# df['']
+
 df.to_csv("data/processed/cleaned_grades.csv", index = False)
