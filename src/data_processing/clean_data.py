@@ -26,4 +26,10 @@ instructor_avg = df.groupby("Primary Instructor")["Average_GPA"].mean().round(2)
 
 df["Instructor_Avg_GPA"] = df["Primary Instructor"].map(instructor_avg)
 
+cols_to_drop = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F", "W", "Students", "Term", "Year", "YearTerm", "Course Title", "Sched Type", "Primary Instructor", "Course"]
+
+df = df.drop(columns=cols_to_drop)
+
+df = pd.get_dummies(df, columns=["Subject"], drop_first=True)
+
 df.to_csv("data/processed/cleaned_grades.csv", index = False)
