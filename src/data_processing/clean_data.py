@@ -38,6 +38,8 @@ college_map = {
 }
 
 def map_college(subject):
+    subject = str(subject).strip().upper()
+
     for college, subjects in college_map.items():
         if subject in subjects:
             return college
@@ -49,7 +51,7 @@ cols_to_drop = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D
 
 df = df.drop(columns=cols_to_drop)
 
-df = pd.get_dummies(df, columns=["College"], drop_first=True)
+df = pd.get_dummies(df, columns=["College"], drop_first=False)
 
 Q1 = df['Average_GPA'].quantile(0.25)
 Q3 = df['Average_GPA'].quantile(0.75)
