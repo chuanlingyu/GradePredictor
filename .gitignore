@@ -5,6 +5,7 @@ __pycache__/
 # Models (VERY IMPORTANT for your project)
 *.pkl
 *.joblib
+outputs/models/
 
 # Data (optional but recommended for ML projects)
 data/raw/
