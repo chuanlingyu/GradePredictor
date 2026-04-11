@@ -1,0 +1,17 @@
+# Python cache
+__pycache__/
+*.pyc
+
+# Models (VERY IMPORTANT for your project)
+*.pkl
+*.joblib
+
+# Data (optional but recommended for ML projects)
+data/raw/
+data/processed/
+
+# Jupyter checkpoints
+.ipynb_checkpoints/
+
+# OS files
+.DS_Store
