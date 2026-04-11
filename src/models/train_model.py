@@ -52,10 +52,6 @@ def evaluate(model, X_test, y_test, name="Model"):
     print("R2:", r2)
 
 
-def save_model(model, path="model.pkl"):
-    with open(path, "wb") as f:
-        pickle.dump(model, f)
-
 def main():
     df = load_data("data/processed/cleaned_grades.csv")
 
@@ -67,7 +63,6 @@ def main():
     rf_model = train_model(X_train, y_train, model_type="rf")
     evaluate(rf_model, X_test, y_test, name="Random Forest")
 
-    save_model(rf_model, "random_forest_model.pkl")
 
 
 if __name__ == "__main__":
