@@ -28,7 +28,7 @@ def train_model(X_train, y_train, model_type="rf"):
 
     elif model_type == "rf":
         model = RandomForestRegressor(
-            n_estimators=200,
+            n_estimators=100,
             random_state=42
         )
 

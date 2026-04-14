@@ -11,7 +11,7 @@ df = df[df["AttendanceRate"] <= 100]
 
 
 
-to_drop = ["Name","Gender","ExtracurricularActivities","ParentalSupport","Study Hours","Attendance (%)","Online Classes Taken"]
+to_drop = ["Name","Gender","ParentalSupport","Online Classes Taken"]
 df = df.drop(columns=to_drop)
 
 df.to_csv("data/processed/cleaned_students.csv", index=False)
