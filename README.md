@@ -4,6 +4,13 @@ The repository for the GradePredictor guided project for the UIUC SIGAIDA club. 
 2. Then, when the student enters the classes they want to take, we compare their subject-level performance to the historical difficulty of those classes in our database. 
 3. This lets us predict how difficult each class may be for that specific student, rather than just saying whether the class is hard in general.
 
+## To Run the Frontend
+1. In the terminal, at the repo root GradePredictor/, type in:
+    npm run frontend:install
+  To download the dependencies
+2. To run the website, do 
+    npm run dev
+  In the terminal. 
 
 ## Project Structure
 
