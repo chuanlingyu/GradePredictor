@@ -2,7 +2,18 @@ import pandas as pd
 
 df = pd.read_csv('data/raw/uiuc-gpa-dataset.csv')
 df = df.dropna(subset=['Primary Instructor'])
-df["Course"] = df["Subject"] + " " + df["Number"].astype(str)
+
+df['Subject'] = df['Subject'].astype(str).str.strip().str.upper()
+df['Number'] = df['Number'].astype(str).str.strip()
+df['Primary Instructor'] = (
+    df['Primary Instructor']
+    .astype(str)
+    .str.split(',')
+    .str[0]
+    .str.strip()
+    .str.upper()
+)
+
 df["GPA_Points"] = (
     (df["A+"] *  4.0) +
     (df["A"] * 4.0) +
@@ -17,7 +28,15 @@ df["GPA_Points"] = (
     (df["D"] * 1.0) +
     (df["D-"] * 0.7) +
     (df["F"] * 0.0)
-).round(2)
+)
+
+df = df.groupby(
+    ['Subject', 'Number', 'Primary Instructor'],
+    as_index=False
+).agg({
+    'GPA_Points': 'sum',
+    'Students': 'sum'
+})
 
 df["Average_GPA"] = (df["GPA_Points"] / df["Students"]).round(2)
 df = df.drop(columns=["GPA_Points"])
@@ -45,9 +64,7 @@ def map_college(subject):
 
 df["College"] = df["Subject"].apply(map_college)
 
-cols_to_drop = ["A+", "A", "A-", "B+", "B", "B-", "C+", "C", "C-", "D+", "D", "D-", "F", "W", "Students", "Term", "Year", "YearTerm", "Course Title", "Sched Type", "Course"]
-
-df = df.drop(columns=cols_to_drop)
+df = df.drop(columns=['Students'])
 
 df = pd.get_dummies(df, columns=["College"])
 

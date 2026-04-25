@@ -38,9 +38,13 @@ for _, row in df.iterrows():
 
 def extract_info(subject, number, instructor):
 
+    subject = subject.strip().upper()
+    number = str(number).strip()
+    instructor = instructor.strip().upper()
+
     key = (subject, number, instructor)
 
-    features = {"Subject": subject, "Number": number, "Instructor": instructor}
+    features = {"Subject": subject, "Number": int(number), "Instructor": instructor}
 
     if key in course_dict:
         features.update(course_dict[key])

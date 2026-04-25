@@ -1,5 +1,6 @@
 import joblib
 import pandas as pd
+from src.utils.course_loader import extract_info
 
 ARTIFACT_PATH = 'outputs/models/model.joblib'
 
@@ -21,3 +22,11 @@ def predict_gpa(features, artifact=None):
     predicted_gpa = model.predict(row)[0]
 
     return float(predicted_gpa)
+
+def predict_course(subject, number, instructor, artifact=None):
+    features = extract_info(subject, number, instructor)
+
+    if features is None:
+        return None
+    
+    return predict_gpa(features, artifact)
