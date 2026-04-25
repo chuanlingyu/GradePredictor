@@ -58,7 +58,7 @@ we can predict better.
         student_history.append(features)
 
 
-        grade = input('What is your grade in that class in letter grade: ').strip.().upper()
+        grade = input('What is your grade in that class in letter grade: ').strip().upper()
 
         grade_to_gpa = {
             "A+": 4.0,

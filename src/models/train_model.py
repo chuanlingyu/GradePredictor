@@ -4,7 +4,8 @@ from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
-import pickle
+import joblib
+from pathlib import Path
 
 
 def load_data(path):
@@ -51,6 +52,8 @@ def evaluate(model, X_test, y_test, name="Model"):
     print("RMSE:", rmse)
     print("R2:", r2)
 
+    return mae, rmse, r2
+
 
 def main():
     df = load_data("data/processed/cleaned_grades.csv")
@@ -61,9 +64,21 @@ def main():
     evaluate(lr_model, X_test, y_test, name="Linear Regression")
 
     rf_model = train_model(X_train, y_train, model_type="rf")
-    evaluate(rf_model, X_test, y_test, name="Random Forest")
+    mae, rmse, r2 = evaluate(rf_model, X_test, y_test, name="Random Forest")
 
+    artifact = {
+        "model": rf_model,
+        'feature_columns': X_train.columns.tolist(),
+        'metrics': {
+            'mae': mae,
+            'rmse': rmse,
+            'r2': r2
+        }
+    }
 
+    Path('outputs/models').mkdir(parents=True, exist_ok=True)
+    joblib.dump(artifact, 'outputs/models/model.joblib')
 
 if __name__ == "__main__":
     main()
+
