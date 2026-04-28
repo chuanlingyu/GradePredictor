@@ -1,11 +1,16 @@
-function formatPercent(value) {
-  if (typeof value !== 'number' || Number.isNaN(value)) return null
-  return `${Math.round(value * 100)}%`
-}
-
 function formatGpa(value) {
   if (typeof value !== 'number' || Number.isNaN(value)) return '—'
   return value.toFixed(2)
+}
+
+function SummaryMetric({ label, value, description }) {
+  return (
+    <div className="metric summaryMetric">
+      <div className="metricLabel">{label}</div>
+      <div className="metricValue">{value}</div>
+      <p className="metricDescription">{description}</p>
+    </div>
+  )
 }
 
 export default function ResultsSection({ results, loading }) {
@@ -42,31 +47,12 @@ export default function ResultsSection({ results, loading }) {
       )}
 
       {!loading && results && !Array.isArray(results) && (
-        <div className="summaryGrid">
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Final projected GPA</div>
-            <div className="metricValue">{formatGpa(results.final_projected_gpa)}</div>
-          </div>
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Projected grade</div>
-            <div className="metricValue">{results.final_projected_grade || '—'}</div>
-          </div>
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Future class average</div>
-            <div className="metricValue">{formatGpa(results.future_average_class_gpa)}</div>
-          </div>
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Past adjustment</div>
-            <div className="metricValue">{formatGpa(results.student_adjustment)}</div>
-          </div>
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Adjusted class projection</div>
-            <div className="metricValue">{formatGpa(results.adjusted_class_projection)}</div>
-          </div>
-          <div className="metric summaryMetric">
-            <div className="metricLabel">Profile projection</div>
-            <div className="metricValue">{formatGpa(results.student_profile_projection)}</div>
-          </div>
+        <div className="summaryGrid singleSummary">
+          <SummaryMetric
+            label="Final projected GPA"
+            value={formatGpa(results.final_projected_gpa)}
+            description="Your personalized projected GPA based on future classes, past performance, and profile."
+          />
         </div>
       )}
 
@@ -88,7 +74,7 @@ export default function ResultsSection({ results, loading }) {
             const professor = r?.professor || '—'
             const predictedGrade = r?.predicted_grade || '—'
             const difficulty = r?.difficulty || '—'
-            const confidence = formatPercent(r?.confidence)
+            const rowError = r?.error
 
             return (
               <article key={`${course}-${idx}`} className="card">
@@ -97,8 +83,9 @@ export default function ResultsSection({ results, loading }) {
                     <h3 className="cardTitle">{course}</h3>
                     <p className="muted">Professor: {professor}</p>
                   </div>
-                  {confidence && <span className="pill">Confidence: {confidence}</span>}
                 </div>
+
+                {rowError && <p className="error courseError">{rowError}</p>}
 
                 <div className="cardGrid">
                   <div className="metric">

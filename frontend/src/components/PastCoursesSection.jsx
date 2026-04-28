@@ -10,7 +10,7 @@ function newPastCourseRow() {
   }
 }
 
-export default function PastCoursesSection({ value, onChange, gradeOptions }) {
+export default function PastCoursesSection({ value, onChange, gradeOptions, validations, onValidate }) {
   function addRow() {
     onChange([...value, newPastCourseRow()])
   }
@@ -48,6 +48,8 @@ export default function PastCoursesSection({ value, onChange, gradeOptions }) {
             onUpdate={updateRow}
             onRemove={removeRow}
             disableRemove={value.length <= 1}
+            validation={validations?.[row.id]}
+            onValidate={onValidate}
           />
         ))}
       </div>

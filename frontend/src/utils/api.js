@@ -7,6 +7,10 @@ function getPredictUrl() {
   return import.meta.env.VITE_PREDICT_URL || DEFAULT_PREDICT_URL
 }
 
+function getApiBaseUrl() {
+  return new URL(getPredictUrl()).origin
+}
+
 async function readErrorMessage(response) {
   // Backend might return JSON or plain text on errors; handle both.
   const contentType = response.headers.get('content-type') || ''
@@ -40,5 +44,21 @@ export async function predictCourses(payload) {
   //   { course, professor, predicted_grade, difficulty, confidence }
   // ]
   return await response.json()
+}
+
+export async function validateCourse(course) {
+  const params = new URLSearchParams({
+    subject: course.subject || '',
+    number: course.number || '',
+    professor: course.professor || '',
+  })
+
+  const response = await fetch(`${getApiBaseUrl()}/courses/validate?${params.toString()}`)
+  const data = await response.json().catch(() => ({}))
+
+  return {
+    valid: response.ok && data.valid === true,
+    message: data.message || (response.ok ? 'Course found.' : 'Course was not found.'),
+  }
 }
 

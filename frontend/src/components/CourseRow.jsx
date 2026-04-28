@@ -6,6 +6,8 @@ export default function CourseRow({
   onUpdate,
   onRemove,
   disableRemove,
+  validation,
+  onValidate,
 }) {
   function updateField(field, value) {
     onUpdate(row.id, { ...row, [field]: value })
@@ -22,6 +24,7 @@ export default function CourseRow({
           className="input"
           value={row.subject}
           onChange={(e) => updateField('subject', e.target.value)}
+          onBlur={() => onValidate?.(row)}
           placeholder="CS"
           autoComplete="off"
           inputMode="text"
@@ -37,6 +40,7 @@ export default function CourseRow({
           className="input"
           value={row.number}
           onChange={(e) => updateField('number', e.target.value)}
+          onBlur={() => onValidate?.(row)}
           placeholder="225"
           autoComplete="off"
           inputMode="numeric"
@@ -52,6 +56,7 @@ export default function CourseRow({
           className="input"
           value={row.professor}
           onChange={(e) => updateField('professor', e.target.value)}
+          onBlur={() => onValidate?.(row)}
           placeholder="Last name (optional)"
           autoComplete="off"
           inputMode="text"
@@ -94,6 +99,12 @@ export default function CourseRow({
           </button>
         </div>
       </div>
+
+      {validation?.message && (
+        <div className={`validationMessage ${validation.valid ? 'valid' : 'invalid'}`}>
+          {validation.message}
+        </div>
+      )}
     </div>
   )
 }

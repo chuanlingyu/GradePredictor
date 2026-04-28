@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 
 from src.models.schedule_pipeline import predict_student_schedule_gpa
+from src.utils.course_loader import course_average_dict, course_dict
 
 app = Flask(__name__)
 
@@ -16,6 +17,48 @@ def add_cors_headers(response):
 @app.route("/predict", methods=["OPTIONS"])
 def predict_options():
     return ("", 204)
+
+
+@app.get("/courses/validate")
+def validate_course():
+    subject = request.args.get("subject", "")
+    number = request.args.get("number", "")
+    professor = request.args.get("professor", "")
+
+    if not subject.strip() or not number.strip():
+        return jsonify({
+            "valid": False,
+            "message": "Enter a subject and course number.",
+        }), 400
+
+    normalized_subject = subject.strip().upper()
+    normalized_number = str(number).strip()
+    normalized_professor = str(professor or "").strip().upper()
+    course_key = (normalized_subject, normalized_number)
+    professor_key = (normalized_subject, normalized_number, normalized_professor)
+
+    if normalized_professor and professor_key in course_dict:
+        return jsonify({
+            "valid": True,
+            "message": "Course and professor found.",
+        })
+
+    if course_key not in course_average_dict:
+        return jsonify({
+            "valid": False,
+            "message": "Course was not found.",
+        }), 404
+
+    if normalized_professor:
+        return jsonify({
+            "valid": True,
+            "message": "Course found; using historical course average for this professor.",
+        })
+
+    return jsonify({
+        "valid": True,
+        "message": "Course found using historical course average.",
+    })
 
 
 @app.post("/predict")

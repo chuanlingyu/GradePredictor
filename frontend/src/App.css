@@ -130,6 +130,20 @@
   background: rgba(0, 0, 0, 0.14);
 }
 
+.validationMessage {
+  grid-column: 1 / -1;
+  font-size: 13px;
+  line-height: 1.35;
+}
+
+.validationMessage.valid {
+  color: rgba(134, 239, 172, 0.92);
+}
+
+.validationMessage.invalid {
+  color: rgba(252, 165, 165, 0.95);
+}
+
 @media (min-width: 980px) {
   .row {
     grid-template-columns: 0.8fr 0.8fr 1.4fr 0.9fr 0.7fr;
@@ -175,6 +189,11 @@
 
 .select {
   padding-right: 10px;
+}
+
+.select option {
+  color: #111827;
+  background: #ffffff;
 }
 
 .input::placeholder {
@@ -267,6 +286,10 @@ button {
   color: rgba(255, 255, 255, 0.92);
 }
 
+.courseError {
+  margin-top: 12px;
+}
+
 .results {
   margin: 18px 0 0;
   border: 1px solid var(--panel-border);
@@ -291,6 +314,10 @@ button {
   grid-template-columns: 1fr;
 }
 
+.singleSummary {
+  max-width: 420px;
+}
+
 @media (min-width: 720px) {
   .summaryGrid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -299,6 +326,13 @@ button {
 
 .summaryMetric .metricValue {
   font-size: 24px;
+}
+
+.metricDescription {
+  margin: 8px 0 0;
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.35;
 }
 
 .notice {

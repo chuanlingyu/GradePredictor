@@ -6,7 +6,7 @@ import PastCoursesSection from './components/PastCoursesSection.jsx'
 import FutureCoursesSection from './components/FutureCoursesSection.jsx'
 import ProfileSection from './components/ProfileSection.jsx'
 import ResultsSection from './components/ResultsSection.jsx'
-import { predictCourses } from './utils/api.js'
+import { predictCourses, validateCourse } from './utils/api.js'
 
 const GRADE_OPTIONS = ['A+', 'A', 'A-', 'B+', 'B', 'B-', 'C+', 'C', 'C-', 'D+', 'D', 'D-', 'F']
 
@@ -62,6 +62,7 @@ export default function App() {
   const [pastCourses, setPastCourses] = useState([newPastCourseRow()])
   const [futureCourses, setFutureCourses] = useState([newFutureCourseRow()])
   const [studentProfile, setStudentProfile] = useState(newStudentProfile())
+  const [courseValidations, setCourseValidations] = useState({})
 
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -73,6 +74,37 @@ export default function App() {
     const anyProfile = Object.values(studentProfile).some((v) => String(v ?? '').trim() !== '')
     return anyPast || anyFuture || anyProfile
   }, [pastCourses, futureCourses, studentProfile])
+
+  async function validateCourseRow(row) {
+    if (isRowEffectivelyEmpty(row)) return
+
+    const normalized = normalizeCourseRow(row)
+    if (!normalized.subject || !normalized.number) {
+      setCourseValidations((current) => ({
+        ...current,
+        [row.id]: { valid: false, message: 'Enter a subject and course number.' },
+      }))
+      return
+    }
+
+    setCourseValidations((current) => ({
+      ...current,
+      [row.id]: { valid: null, message: 'Checking course...' },
+    }))
+
+    try {
+      const validation = await validateCourse(normalized)
+      setCourseValidations((current) => ({
+        ...current,
+        [row.id]: validation,
+      }))
+    } catch {
+      setCourseValidations((current) => ({
+        ...current,
+        [row.id]: { valid: false, message: 'Could not validate course. Is the backend running?' },
+      }))
+    }
+  }
 
   async function onPredict() {
     setError('')
@@ -123,11 +155,18 @@ export default function App() {
               value={pastCourses}
               onChange={setPastCourses}
               gradeOptions={GRADE_OPTIONS}
+              validations={courseValidations}
+              onValidate={validateCourseRow}
             />
           </section>
 
           <section className="panel">
-            <FutureCoursesSection value={futureCourses} onChange={setFutureCourses} />
+            <FutureCoursesSection
+              value={futureCourses}
+              onChange={setFutureCourses}
+              validations={courseValidations}
+              onValidate={validateCourseRow}
+            />
           </section>
         </div>
 

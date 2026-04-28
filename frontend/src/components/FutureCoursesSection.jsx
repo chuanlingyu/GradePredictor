@@ -9,7 +9,7 @@ function newFutureCourseRow() {
   }
 }
 
-export default function FutureCoursesSection({ value, onChange }) {
+export default function FutureCoursesSection({ value, onChange, validations, onValidate }) {
   function addRow() {
     onChange([...value, newFutureCourseRow()])
   }
@@ -46,6 +46,8 @@ export default function FutureCoursesSection({ value, onChange }) {
             onUpdate={updateRow}
             onRemove={removeRow}
             disableRemove={value.length <= 1}
+            validation={validations?.[row.id]}
+            onValidate={onValidate}
           />
         ))}
       </div>
