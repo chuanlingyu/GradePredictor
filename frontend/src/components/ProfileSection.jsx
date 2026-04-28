@@ -102,7 +102,7 @@ export default function ProfileSection({ value, onChange }) {
         </div>
 
         <div className="field">
-          <label className="label" htmlFor="profile-stress">Stress level</label>
+          <label className="label" htmlFor="profile-stress">Stress level (1-10)</label>
           <input
             id="profile-stress"
             className="input"
