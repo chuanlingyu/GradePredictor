@@ -1,7 +1,6 @@
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
-from sklearn.linear_model import LinearRegression
 from sklearn.ensemble import RandomForestRegressor
 from sklearn.metrics import mean_absolute_error, mean_squared_error, r2_score
 import joblib
@@ -29,19 +28,11 @@ def split_data(df, target_col="Average_GPA"):
     return train_test_split(X, y, test_size=0.2, random_state=42)
 
 
-def train_class_gpa_model(X_train, y_train, model_type="rf"):
-    if model_type == "lr":
-        model = LinearRegression()
-
-    elif model_type == "rf":
-        model = RandomForestRegressor(
-            n_estimators=100,
-            random_state=42
-        )
-
-    else:
-        raise ValueError("model_type must be 'lr' or 'rf'")
-
+def train_class_gpa_model(X_train, y_train):
+    model = RandomForestRegressor(
+        n_estimators=100,
+        random_state=42
+    )
     model.fit(X_train, y_train)
     return model
 
@@ -78,10 +69,7 @@ def main():
 
     X_train, X_test, y_train, y_test = split_data(df)
 
-    lr_model = train_class_gpa_model(X_train, y_train, model_type="lr")
-    evaluate(lr_model, X_test, y_test, name="Linear Regression")
-
-    rf_model = train_class_gpa_model(X_train, y_train, model_type="rf")
+    rf_model = train_class_gpa_model(X_train, y_train)
     mae, rmse, r2 = evaluate(rf_model, X_test, y_test, name="Random Forest")
 
     save_path = save_artifact(
