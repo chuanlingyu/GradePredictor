@@ -8,9 +8,20 @@ The repository for the GradePredictor guided project for the UIUC SIGAIDA club. 
 1. In the terminal, at the repo root GradePredictor/, type in:
     npm run frontend:install
   To download the dependencies
-2. To run the website, do 
+2. To run the website, do
     npm run dev
-  In the terminal. 
+  In the terminal.
+
+## To Run the Backend
+1. Install the Python dependencies:
+    pip install -r requirements.txt
+2. Train or refresh the model artifacts:
+    python src/models/class_gpa.py
+    python src/models/student_gpa.py
+3. Start the Flask prediction API:
+    npm run backend
+
+The frontend posts to `http://localhost:5000/predict` by default.
 
 ## Project Structure
 
@@ -34,15 +45,21 @@ uiuc-schedule-ai/
 │   │   └── build_features.py
 │   │
 │   ├── models/
-│   │   ├── train_model.py
+│   │   ├── class_gpa.py
+│   │   ├── student_gpa.py
+│   │   ├── schedule_pipeline.py
 │   │   └── predict.py
+│   │
+│   ├── api/
+│   │   └── app.py
 │   │
 │   └── utils/
 │       └── helpers.py
 │
 ├── outputs/
 │   ├── models/
-│   │   └── grade_model.pkl
+│   │   ├── class_gpa_model.joblib
+│   │   └── student_gpa_model.joblib
 │   └── plots/
 │
 ├── requirements.txt
@@ -82,11 +99,23 @@ uiuc-schedule-ai/
 ---
 
 ### src/models/
-- `train_model.py`  
-  Trains the grade prediction model.
+- `class_gpa.py`  
+  Trains the class GPA prediction model.
+
+- `student_gpa.py`  
+  Trains the student GPA prediction model.
 
 - `predict.py`  
   Uses the trained model to predict grades for a course/professor.
+
+- `schedule_pipeline.py`
+  Combines past-course adjustment, future class GPA, and student profile GPA into one final projected GPA.
+
+---
+
+### src/api/
+- `app.py`
+  Flask API with the `/predict` endpoint used by the frontend.
 
 ---
 

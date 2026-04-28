@@ -4,6 +4,7 @@
   "version": "0.0.0",
   "description": "Root scripts that forward to the Vite frontend in ./frontend",
   "scripts": {
+    "backend": "python -m src.api.app",
     "dev": "npm --prefix frontend run dev",
     "build": "npm --prefix frontend run build",
     "lint": "npm --prefix frontend run lint",

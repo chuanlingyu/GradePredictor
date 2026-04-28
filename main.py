@@ -1,7 +1,8 @@
 def main():
     print(
-        "GradePredictor backend work is moving into src/models and the upcoming API. "
-        "Run `python src/models/train_model.py` to train and save the model artifact."
+        "Run `npm run backend` for the prediction API, `npm run dev` for the frontend, "
+        "or train artifacts with `python src/models/class_gpa.py` and "
+        "`python src/models/student_gpa.py`."
     )
 
 

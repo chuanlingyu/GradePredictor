@@ -4,6 +4,7 @@ import { useMemo, useState } from 'react'
 import Header from './components/Header.jsx'
 import PastCoursesSection from './components/PastCoursesSection.jsx'
 import FutureCoursesSection from './components/FutureCoursesSection.jsx'
+import ProfileSection from './components/ProfileSection.jsx'
 import ResultsSection from './components/ResultsSection.jsx'
 import { predictCourses } from './utils/api.js'
 
@@ -28,6 +29,18 @@ function newFutureCourseRow() {
   }
 }
 
+function newStudentProfile() {
+  return {
+    age: '',
+    branch: '',
+    study_hours_per_day: '',
+    sleep_hours: '',
+    screen_time_hours: '',
+    attendance_percentage: '',
+    stress_level: '',
+  }
+}
+
 function isRowEffectivelyEmpty(row) {
   // Treat rows with all-blank inputs as "not provided" (so users can leave a starter row empty).
   return Object.values(row).every((v) => String(v ?? '').trim() === '' || v === row.id)
@@ -48,6 +61,7 @@ function normalizeCourseRow(row) {
 export default function App() {
   const [pastCourses, setPastCourses] = useState([newPastCourseRow()])
   const [futureCourses, setFutureCourses] = useState([newFutureCourseRow()])
+  const [studentProfile, setStudentProfile] = useState(newStudentProfile())
 
   const [results, setResults] = useState(null)
   const [loading, setLoading] = useState(false)
@@ -56,8 +70,9 @@ export default function App() {
   const canPredict = useMemo(() => {
     const anyPast = pastCourses.some((r) => !isRowEffectivelyEmpty(r))
     const anyFuture = futureCourses.some((r) => !isRowEffectivelyEmpty(r))
-    return anyPast || anyFuture
-  }, [pastCourses, futureCourses])
+    const anyProfile = Object.values(studentProfile).some((v) => String(v ?? '').trim() !== '')
+    return anyPast || anyFuture || anyProfile
+  }, [pastCourses, futureCourses, studentProfile])
 
   async function onPredict() {
     setError('')
@@ -78,10 +93,11 @@ export default function App() {
     const payload = {
       past_courses: cleanedPast,
       future_courses: cleanedFuture,
+      student_profile: studentProfile,
     }
 
-    if (!payload.past_courses.length && !payload.future_courses.length) {
-      setError('Please enter at least one past or future course before predicting.')
+    if (!canPredict) {
+      setError('Please enter at least one course or profile answer before predicting.')
       return
     }
 
@@ -115,12 +131,16 @@ export default function App() {
           </section>
         </div>
 
+        <section className="panel profilePanel">
+          <ProfileSection value={studentProfile} onChange={setStudentProfile} />
+        </section>
+
         <section className="actions">
           <button className="primary" onClick={onPredict} disabled={loading || !canPredict}>
-            {loading ? 'Predicting…' : 'Predict My Difficulty'}
+            {loading ? 'Predicting…' : 'Predict My GPA'}
           </button>
 
-          {!canPredict && <p className="hint">Add at least one past or future course to enable prediction.</p>}
+          {!canPredict && <p className="hint">Add at least one course or profile answer to enable prediction.</p>}
           {error && <p className="error" role="alert">{error}</p>}
         </section>
 
