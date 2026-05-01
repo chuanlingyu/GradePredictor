@@ -10,7 +10,7 @@ The repository for the GradePredictor guided project for the UIUC SIGAIDA club. 
   To download the dependencies
 2. To run the website, do
     npm run dev
-  In the terminal.
+  In the terminal. However, for the real functions to work, need to run the backend first using npm run backend. For detail check below.
 
 ## To Run the Backend
 1. Install the Python dependencies:
