@@ -1,4 +1,4 @@
-# GradePredictor
+# grade-predictor
 The repository for the GradePredictor guided project for the UIUC SIGAIDA club. The ultimate goal is to create a class schedule generator for students in UIUC.
 1. We will take a student's past course grades and use them to estimate their academic strengths overall and by subject. 
 2. Then, when the student enters the classes they want to take, we compare their subject-level performance to the historical difficulty of those classes in our database. 
